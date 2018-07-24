@@ -1,7 +1,9 @@
-syntax: glob
-
+build
 debian/libpam-face
+debian/.debhelper
+src/libpam_face.egg-info
 **.pyc
+
 
 ## Debian package files
 **.dsc

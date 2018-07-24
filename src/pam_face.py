@@ -10,6 +10,7 @@ All rights reserved.
 
 import syslog
 import os
+import pwd
 import ConfigParser
 
 from pamface import __version__ as VERSION
@@ -97,6 +98,11 @@ def pam_sm_authenticate(pamh, flags, argv):
         ## Be sure the user is set
         if (userName == None):
             raise UserUnknownException('The user is not known!')
+
+        ## Stupid hack to workaroud gnome keyring isn't decrypted when login.
+        userId = pwd.getpwnam(userName).pw_uid
+        if (not os.path.exists('/run/user/%d/keyring/control' % userId)):
+            raise Exception('Login using password first')
 
         ## No user trained?
         if (os.path.getsize(MODELS_FILE) == 0):
